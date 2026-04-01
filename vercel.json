@@ -9,7 +9,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://flowcode-one.vercel.app https://*.vercel.app http://localhost:5173 http://localhost:5174 http://localhost:3000"
+          "value": "frame-ancestors *"
         }
       ]
     }
