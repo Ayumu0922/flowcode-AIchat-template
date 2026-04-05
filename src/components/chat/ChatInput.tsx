@@ -10,15 +10,12 @@ import {
   Paperclip,
   Globe,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Textarea } from '@/components/ui/textarea'
-import { cn } from '@/lib/utils'
 
 interface Attachment {
   id: string
@@ -109,12 +106,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
         onChange={handleFileSelect}
       />
 
-      <div
-        className={cn(
-          'max-w-3xl mx-auto rounded-2xl border bg-card transition-shadow duration-150',
-          isFocused ? 'shadow-md ring-1 ring-foreground/10' : 'shadow-sm',
-        )}
-      >
+      <div className={isFocused ? "max-w-3xl mx-auto rounded-2xl border bg-card transition-shadow duration-150 shadow-md ring-1 ring-foreground/10" : "max-w-3xl mx-auto rounded-2xl border bg-card transition-shadow duration-150 shadow-sm"}>
         {/* Attachment previews */}
         {attachments.length > 0 && (
           <div className="flex gap-2 px-4 pt-3 pb-1 overflow-x-auto">
@@ -159,21 +151,19 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
 
         {/* Input row */}
         <div className="flex items-center gap-1 p-2">
-          {/* + button → dropdown menu */}
+          {/* + button -> dropdown menu */}
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-full bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground shrink-0"
+                <button
+                  className="inline-flex shrink-0 items-center justify-center h-8 w-8 rounded-full bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
                   disabled={disabled}
                 />
               }
             >
               <Plus className="h-5 w-5" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" side="top" className="w-48 mb-1">
+            <DropdownMenuContent align="start" side="top">
               <DropdownMenuItem onClick={() => imageInputRef.current?.click()}>
                 <ImageIcon className="h-4 w-4 mr-2" />
                 画像をアップロード
@@ -194,7 +184,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           </DropdownMenu>
 
           {/* Textarea */}
-          <Textarea
+          <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -208,30 +198,22 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
 
           {/* Right: mic toggle or send */}
           {hasContent ? (
-            <Button
+            <button
               onClick={handleSend}
               disabled={disabled}
-              size="icon"
-              className="h-8 w-8 rounded-full shrink-0"
+              className="inline-flex shrink-0 items-center justify-center size-8 rounded-full border border-transparent bg-primary text-primary-foreground font-medium transition-all disabled:pointer-events-none disabled:opacity-50"
             >
               <ArrowUp className="h-4 w-4" />
-            </Button>
+            </button>
           ) : (
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn(
-                'h-8 w-8 rounded-full shrink-0 transition-colors',
-                isRecording
-                  ? 'text-destructive bg-destructive/10 hover:bg-destructive/15'
-                  : 'text-muted-foreground hover:text-foreground',
-              )}
+            <button
+              className={isRecording ? "inline-flex shrink-0 items-center justify-center size-8 rounded-full transition-colors text-destructive bg-destructive/10 hover:bg-destructive/15" : "inline-flex shrink-0 items-center justify-center size-8 rounded-full transition-colors text-muted-foreground hover:text-foreground"}
               onClick={toggleRecording}
               disabled={disabled}
               title={isRecording ? '録音停止' : '音声入力'}
             >
               {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-            </Button>
+            </button>
           )}
         </div>
       </div>

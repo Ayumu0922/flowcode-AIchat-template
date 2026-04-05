@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Search, MessageSquare, Calendar, Filter } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -12,7 +9,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useChatStore } from '@/stores/useChatStore'
-import { theme } from '@/lib/theme'
 
 export function History() {
   const navigate = useNavigate()
@@ -50,15 +46,15 @@ export function History() {
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
+            <input
               placeholder="検索..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-lg border-border/60 bg-muted/30 h-9"
+              className="h-9 w-full min-w-0 rounded-lg border border-border/60 bg-muted/30 pl-9 pr-2.5 py-1 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
             />
           </div>
           <Select value={categoryFilter} onValueChange={(val) => val && setCategoryFilter(val)}>
-            <SelectTrigger className="w-full sm:w-40 rounded-lg border-border/60 h-9">
+            <SelectTrigger>
               <Filter className="h-3.5 w-3.5 mr-1.5" />
               <SelectValue placeholder="カテゴリ" />
             </SelectTrigger>
@@ -78,16 +74,16 @@ export function History() {
           {filtered.map((conv) => (
             <button
               key={conv.id}
-              className={`w-full text-left px-3 py-3 rounded-lg ${theme.surface.hover} transition-colors flex items-start gap-3`}
+              className="w-full text-left px-3 py-3 rounded-lg hover:bg-surface-hover transition-colors flex items-start gap-3"
               onClick={() => handleOpen(conv.id)}
             >
               <MessageSquare className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground truncate">{conv.title}</span>
-                  <Badge variant="secondary" className="text-[10px] shrink-0 font-normal h-4">
+                  <span className="inline-flex h-4 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl bg-secondary text-secondary-foreground px-2 py-0.5 text-[10px] font-normal whitespace-nowrap">
                     {conv.category}
-                  </Badge>
+                  </span>
                 </div>
                 <p className="text-xs text-muted-foreground truncate mt-0.5">{conv.preview}</p>
                 <div className="flex items-center gap-3 mt-1">
@@ -109,14 +105,12 @@ export function History() {
             <div className="text-center py-12">
               <Search className="h-8 w-8 text-muted-foreground/20 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">該当なし</p>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="mt-2 text-xs"
+              <button
+                className="mt-2 text-xs inline-flex items-center justify-center rounded-lg h-7 px-2.5 font-medium transition-all hover:bg-muted hover:text-foreground"
                 onClick={() => { setSearch(''); setCategoryFilter('all') }}
               >
                 クリア
-              </Button>
+              </button>
             </div>
           )}
         </div>

@@ -12,7 +12,6 @@ import {
   PanelLeftClose,
   PanelLeft,
 } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -25,8 +24,6 @@ import { mockUser } from '@/data/mockUser'
 import { useThemeStore } from '@/stores/useThemeStore'
 import { useSidebarStore } from '@/stores/useSidebarStore'
 import { useChatStore } from '@/stores/useChatStore'
-import { cn } from '@/lib/utils'
-import { theme as t } from '@/lib/theme'
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'ダッシュボード' },
@@ -48,40 +45,31 @@ export function Sidebar() {
   }
 
   return (
-    <aside
-      className={cn(
-        'hidden md:flex flex-col bg-sidebar h-screen sticky top-0 border-r border-border transition-[width] duration-200 ease-out overflow-hidden',
-        open ? 'w-[260px]' : 'w-[52px]',
-      )}
-    >
+    <aside className={open ? "hidden md:flex flex-col bg-sidebar h-screen sticky top-0 border-r border-border transition-[width] duration-200 ease-out overflow-hidden w-[260px]" : "hidden md:flex flex-col bg-sidebar h-screen sticky top-0 border-r border-border transition-[width] duration-200 ease-out overflow-hidden w-[52px]"}>
       {/* Top */}
-      <div className={cn('flex items-center gap-1 p-2', open ? '' : 'flex-col')}>
+      <div className={open ? "flex items-center gap-1 p-2" : "flex items-center gap-1 p-2 flex-col"}>
         <Button
           variant="ghost"
           size="icon"
           onClick={toggle}
-          className="h-8 w-8 shrink-0"
           title={open ? 'サイドバーを閉じる' : 'サイドバーを開く'}
         >
           {open ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeft className="h-4 w-4" />}
         </Button>
 
         {open ? (
-          <Button
+          <button
             onClick={handleNewChat}
-            variant="outline"
-            className="flex-1 justify-start gap-2 rounded-lg text-sm h-8 border-border/60"
-            size="sm"
+            className="flex-1 inline-flex items-center justify-start gap-2 rounded-lg border border-border/60 bg-background text-sm h-8 px-2.5 font-medium transition-all hover:bg-muted hover:text-foreground"
           >
             <Plus className="h-4 w-4" />
             新しいチャット
-          </Button>
+          </button>
         ) : (
           <Button
             onClick={handleNewChat}
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
             title="新しいチャット"
           >
             <Plus className="h-4 w-4" />
@@ -90,20 +78,16 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className={cn('flex-1 overflow-auto space-y-0.5', open ? 'px-2' : 'px-1.5')}>
+      <nav className={open ? "flex-1 overflow-auto space-y-0.5 px-2" : "flex-1 overflow-auto space-y-0.5 px-1.5"}>
         {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             title={open ? undefined : item.label}
             className={({ isActive }) =>
-              cn(
-                'flex items-center rounded-lg transition-colors duration-100',
-                open ? 'gap-3 px-3 py-2 text-sm' : 'justify-center h-8 w-8 mx-auto',
-                isActive
-                  ? cn(t.surface.active, 'text-foreground font-medium')
-                  : cn('text-muted-foreground hover:text-foreground', t.surface.hover),
-              )
+              isActive
+                ? (open ? "flex items-center rounded-lg transition-colors duration-100 gap-3 px-3 py-2 text-sm bg-surface-active text-foreground font-medium" : "flex items-center rounded-lg transition-colors duration-100 justify-center h-8 w-8 mx-auto bg-surface-active text-foreground font-medium")
+                : (open ? "flex items-center rounded-lg transition-colors duration-100 gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-surface-hover" : "flex items-center rounded-lg transition-colors duration-100 justify-center h-8 w-8 mx-auto text-muted-foreground hover:text-foreground hover:bg-surface-hover")
             }
           >
             <item.icon className="h-4 w-4 shrink-0" />
@@ -115,7 +99,7 @@ export function Sidebar() {
       <Separator />
 
       {/* Bottom */}
-      <div className={cn('space-y-0.5', open ? 'p-2' : 'p-1.5')}>
+      <div className={open ? "space-y-0.5 p-2" : "space-y-0.5 p-1.5"}>
         {/* Theme */}
         <DropdownMenu>
           {open ? (
@@ -143,7 +127,7 @@ export function Sidebar() {
               {theme === 'system' && <Monitor className="h-4 w-4" />}
             </DropdownMenuTrigger>
           )}
-          <DropdownMenuContent align="start" className="w-44">
+          <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={() => setTheme('light')}>
               <Sun className="h-4 w-4 mr-2" /> ライト
             </DropdownMenuItem>
@@ -157,13 +141,10 @@ export function Sidebar() {
         </DropdownMenu>
 
         {/* User */}
-        <div className={cn('flex items-center', open ? 'gap-3 px-3 py-2' : 'justify-center py-1')}>
-          <Avatar className="h-7 w-7 shrink-0" title={open ? undefined : mockUser.name}>
-            <AvatarImage src={mockUser.avatar} alt={mockUser.name} />
-            <AvatarFallback className="bg-foreground/10 text-foreground text-[10px] font-medium">
-              {mockUser.name.slice(0, 1)}
-            </AvatarFallback>
-          </Avatar>
+        <div className={open ? "flex items-center gap-3 px-3 py-2" : "flex items-center justify-center py-1"}>
+          <div className="relative flex size-7 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten" title={open ? undefined : mockUser.name}>
+            <img src={mockUser.avatar} alt={mockUser.name} className="aspect-square size-full rounded-full object-cover" />
+          </div>
           {open && <span className="text-sm text-foreground truncate">{mockUser.name}</span>}
         </div>
       </div>

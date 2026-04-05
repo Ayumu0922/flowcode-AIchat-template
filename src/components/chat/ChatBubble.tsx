@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import type { Message } from '@/data/mockConversations'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { mockUser } from '@/data/mockUser'
 import {
@@ -17,9 +14,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { chatBubble } from '@/lib/motion'
-import { theme } from '@/lib/theme'
 import { useChatStore } from '@/stores/useChatStore'
 
 interface ChatBubbleProps {
@@ -68,141 +63,104 @@ export function ChatBubble({ message, index }: ChatBubbleProps) {
         initial="initial"
         animate="animate"
         transition={{ delay: index * 0.03 }}
-        className={cn(
-          'group flex gap-3 max-w-3xl',
-          isUser ? 'ml-auto flex-row-reverse' : '',
-        )}
+        className={isUser ? "group flex gap-3 max-w-3xl ml-auto flex-row-reverse" : "group flex gap-3 max-w-3xl"}
       >
         {/* Avatar */}
-        <Avatar className="h-7 w-7 shrink-0 mt-0.5">
+        <div className="relative flex size-7 shrink-0 mt-0.5 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten">
           {isUser ? (
-            <>
-              <AvatarImage src={mockUser.avatar} alt={mockUser.name} />
-              <AvatarFallback className={cn(theme.icon.muted, 'text-[10px] font-medium')}>
-                {mockUser.name.slice(0, 1)}
-              </AvatarFallback>
-            </>
+            <img src={mockUser.avatar} alt={mockUser.name} className="aspect-square size-full rounded-full object-cover" />
           ) : (
-            <AvatarFallback className={theme.icon.accent}>
+            <div className="flex size-full items-center justify-center rounded-full bg-icon-accent text-icon-accent-fg">
               <Bot className="h-3.5 w-3.5" />
-            </AvatarFallback>
+            </div>
           )}
-        </Avatar>
+        </div>
 
         {/* Content */}
-        <div className={cn('flex-1 min-w-0', isUser ? 'text-right' : '')}>
+        <div className={isUser ? "flex-1 min-w-0 text-right" : "flex-1 min-w-0"}>
           {/* Role label */}
-          <div className={cn('text-xs text-muted-foreground mb-1 px-1', isUser ? 'text-right' : '')}>
+          <div className={isUser ? "text-xs text-muted-foreground mb-1 px-1 text-right" : "text-xs text-muted-foreground mb-1 px-1"}>
             {isUser ? 'あなた' : 'AI Assistant'}
           </div>
 
           {/* Bubble */}
           {isEditing ? (
             <div className="space-y-2">
-              <Textarea
+              <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="min-h-[60px] rounded-xl text-[15px]"
+                className="flex field-sizing-content min-h-[60px] w-full rounded-xl border border-input bg-transparent px-2.5 py-2 text-[15px] transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                 autoFocus
               />
               <div className="flex gap-1.5 justify-end">
-                <Button variant="ghost" size="sm" onClick={handleEditCancel} className="h-7 text-xs gap-1">
+                <button className="inline-flex shrink-0 items-center justify-center rounded-lg h-7 px-2.5 text-xs font-medium transition-all hover:bg-muted hover:text-foreground gap-1" onClick={handleEditCancel}>
                   <X className="h-3 w-3" /> キャンセル
-                </Button>
-                <Button size="sm" onClick={handleEditSave} className="h-7 text-xs">
+                </button>
+                <button className="inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary text-primary-foreground h-7 px-2.5 text-xs font-medium transition-all" onClick={handleEditSave}>
                   保存
-                </Button>
+                </button>
               </div>
             </div>
           ) : (
-            <div
-              className={cn(
-                'inline-block text-left rounded-2xl px-4 py-2.5 leading-relaxed',
-                theme.text.body,
-                isUser ? theme.bubble.user : theme.bubble.ai,
-              )}
-            >
+            <div className={isUser ? "inline-block text-left rounded-2xl px-4 py-2.5 leading-relaxed text-[15px] bg-bubble-user text-bubble-user-fg" : "inline-block text-left rounded-2xl px-4 py-2.5 leading-relaxed text-[15px] bg-bubble-ai text-bubble-ai-fg"}>
               <div className="whitespace-pre-wrap">{message.content}</div>
             </div>
           )}
 
           {/* Action bar */}
           {!isEditing && (
-            <div
-              className={cn(
-                'flex items-center gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150',
-                isUser ? 'justify-end' : 'justify-start',
-              )}
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground"
+            <div className={isUser ? "flex items-center gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150 justify-end" : "flex items-center gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150 justify-start"}>
+              <button
+                className="inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
                 onClick={handleCopy}
                 title="コピー"
               >
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-              </Button>
+              </button>
 
               {!isUser && (
                 <>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground"
+                  <button
+                    className="inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
                     onClick={() => setShowRegenConfirm(true)}
                     title="再生成"
                   >
                     <RefreshCw className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={cn(
-                      'h-7 w-7 rounded-md',
-                      feedback === 'up' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
-                    )}
+                  </button>
+                  <button
+                    className={feedback === 'up' ? "inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-foreground transition-all" : "inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-muted-foreground hover:text-foreground transition-all"}
                     onClick={() => setFeedback(feedback === 'up' ? null : 'up')}
                     title="良い回答"
                   >
                     <ThumbsUp className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={cn(
-                      'h-7 w-7 rounded-md',
-                      feedback === 'down' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
-                    )}
+                  </button>
+                  <button
+                    className={feedback === 'down' ? "inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-foreground transition-all" : "inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-muted-foreground hover:text-foreground transition-all"}
                     onClick={() => setFeedback(feedback === 'down' ? null : 'down')}
                     title="悪い回答"
                   >
                     <ThumbsDown className="h-3.5 w-3.5" />
-                  </Button>
+                  </button>
                 </>
               )}
 
               {isUser && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground"
+                <button
+                  className="inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
                   onClick={handleEdit}
                   title="編集"
                 >
                   <Pencil className="h-3.5 w-3.5" />
-                </Button>
+                </button>
               )}
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive"
+              <button
+                className="inline-flex shrink-0 items-center justify-center rounded-md size-7 hover:bg-muted text-muted-foreground hover:text-destructive transition-all"
                 onClick={() => setShowDeleteConfirm(true)}
                 title="削除"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-              </Button>
+              </button>
 
               <span className="text-[10px] text-muted-foreground/40 ml-1">
                 {new Date(message.timestamp).toLocaleTimeString('ja-JP', {

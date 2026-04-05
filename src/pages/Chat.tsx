@@ -2,13 +2,11 @@ import { useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { AnimatePresence } from 'framer-motion'
 import { MessageSquare, Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ChatBubble } from '@/components/chat/ChatBubble'
 import { ChatInput } from '@/components/chat/ChatInput'
 import { TypingIndicator } from '@/components/chat/TypingIndicator'
 import { useChatStore } from '@/stores/useChatStore'
-import { theme } from '@/lib/theme'
 
 export function Chat() {
   const { id } = useParams()
@@ -56,23 +54,25 @@ export function Chat() {
     <div className="flex flex-1 flex-col h-[calc(100vh-3rem)] md:h-screen">
       {currentConv ? (
         <>
-          <ScrollArea className="flex-1 p-4 md:p-6 pb-0">
-            <div className="max-w-3xl mx-auto space-y-5 pb-4">
-              {currentConv.messages.map((msg, i) => (
-                <ChatBubble key={msg.id} message={msg} index={i} />
-              ))}
-              <AnimatePresence>
-                {isTyping && <TypingIndicator />}
-              </AnimatePresence>
-              <div ref={messagesEndRef} />
-            </div>
-          </ScrollArea>
+          <div className="flex-1 p-4 md:p-6 pb-0 overflow-auto">
+            <ScrollArea>
+              <div className="max-w-3xl mx-auto space-y-5 pb-4">
+                {currentConv.messages.map((msg, i) => (
+                  <ChatBubble key={msg.id} message={msg} index={i} />
+                ))}
+                <AnimatePresence>
+                  {isTyping && <TypingIndicator />}
+                </AnimatePresence>
+                <div ref={messagesEndRef} />
+              </div>
+            </ScrollArea>
+          </div>
           <ChatInput onSend={handleSend} disabled={isTyping} />
         </>
       ) : (
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center max-w-lg">
-            <div className={`w-12 h-12 rounded-full ${theme.icon.accent} flex items-center justify-center mx-auto mb-4`}>
+            <div className="w-12 h-12 rounded-full bg-icon-accent text-icon-accent-fg flex items-center justify-center mx-auto mb-4">
               <Sparkles className="h-6 w-6" />
             </div>
             <h2 className="text-lg font-semibold text-foreground mb-1">
@@ -84,11 +84,9 @@ export function Chat() {
             <div className="grid grid-cols-2 gap-2 max-w-sm mx-auto">
               {['有給休暇について', 'IT環境の設定', '会議室の予約', '売上レポート'].map(
                 (prompt) => (
-                  <Button
+                  <button
                     key={prompt}
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl text-xs h-auto py-2.5 border-border/60"
+                    className="inline-flex shrink-0 items-center justify-center rounded-xl border border-border/60 bg-background text-xs h-auto py-2.5 px-2.5 font-medium transition-all hover:bg-muted hover:text-foreground"
                     onClick={() => {
                       const newId = createNewConversation()
                       navigate(`/chat/${newId}`)
@@ -97,7 +95,7 @@ export function Chat() {
                   >
                     <MessageSquare className="h-3 w-3 mr-1.5 shrink-0 text-muted-foreground" />
                     {prompt}
-                  </Button>
+                  </button>
                 ),
               )}
             </div>

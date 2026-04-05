@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { Sun, Moon, Monitor, Check, Type } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Card, CardContent } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -13,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { mockUser } from '@/data/mockUser'
 import { useThemeStore } from '@/stores/useThemeStore'
 import {
@@ -21,7 +17,6 @@ import {
   fontSizeLabel,
   type FontSize,
 } from '@/stores/useAppearanceStore'
-import { cn } from '@/lib/utils'
 
 const fontSizes: FontSize[] = ['small', 'medium', 'large']
 
@@ -55,25 +50,20 @@ export function Settings() {
         <h1 className="text-2xl font-semibold text-foreground">設定</h1>
 
         {/* Theme */}
-        <Card className="border-border/60">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">テーマ</CardTitle>
-          </CardHeader>
+        <Card>
+          <div className="px-4 pb-3">
+            <p className="text-sm font-medium">テーマ</p>
+          </div>
           <CardContent>
             <div className="grid grid-cols-3 gap-2">
               {themes.map((t) => (
                 <button
                   key={t.value}
                   onClick={() => setTheme(t.value)}
-                  className={cn(
-                    'flex flex-col items-center gap-1.5 p-3 rounded-lg border transition-colors duration-100',
-                    theme === t.value
-                      ? 'border-foreground/30 bg-foreground/[0.04]'
-                      : 'border-border/60 hover:border-foreground/15',
-                  )}
+                  className={theme === t.value ? "flex flex-col items-center gap-1.5 p-3 rounded-lg border border-foreground/30 bg-foreground/[0.04] transition-colors duration-100" : "flex flex-col items-center gap-1.5 p-3 rounded-lg border border-border/60 hover:border-foreground/15 transition-colors duration-100"}
                 >
-                  <t.icon className={cn('h-5 w-5', theme === t.value ? 'text-foreground' : 'text-muted-foreground')} />
-                  <span className={cn('text-xs', theme === t.value ? 'text-foreground font-medium' : 'text-muted-foreground')}>
+                  <t.icon className={theme === t.value ? "h-5 w-5 text-foreground" : "h-5 w-5 text-muted-foreground"} />
+                  <span className={theme === t.value ? "text-xs text-foreground font-medium" : "text-xs text-muted-foreground"}>
                     {t.label}
                   </span>
                 </button>
@@ -83,39 +73,26 @@ export function Settings() {
         </Card>
 
         {/* Font size */}
-        <Card className="border-border/60">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-1.5">
+        <Card>
+          <div className="px-4 pb-3">
+            <div className="flex items-center gap-1.5 text-sm font-medium">
               <Type className="h-4 w-4 text-muted-foreground" />
               文字サイズ
-            </CardTitle>
-            <CardDescription className="text-xs">アプリ全体の文字サイズを変更します</CardDescription>
-          </CardHeader>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">アプリ全体の文字サイズを変更します</p>
+          </div>
           <CardContent>
             <div className="grid grid-cols-3 gap-2">
               {fontSizes.map((size) => (
                 <button
                   key={size}
                   onClick={() => setFontSize(size)}
-                  className={cn(
-                    'flex flex-col items-center gap-2 p-3 rounded-lg border transition-colors duration-100',
-                    fontSize === size
-                      ? 'border-foreground/30 bg-foreground/[0.04]'
-                      : 'border-border/60 hover:border-foreground/15',
-                  )}
+                  className={fontSize === size ? "flex flex-col items-center gap-2 p-3 rounded-lg border border-foreground/30 bg-foreground/[0.04] transition-colors duration-100" : "flex flex-col items-center gap-2 p-3 rounded-lg border border-border/60 hover:border-foreground/15 transition-colors duration-100"}
                 >
-                  <span
-                    className={cn(
-                      'font-medium',
-                      size === 'small' && 'text-sm',
-                      size === 'medium' && 'text-base',
-                      size === 'large' && 'text-lg',
-                      fontSize === size ? 'text-foreground' : 'text-muted-foreground',
-                    )}
-                  >
+                  <span className={fontSize === size ? (size === 'small' ? "font-medium text-sm text-foreground" : size === 'medium' ? "font-medium text-base text-foreground" : "font-medium text-lg text-foreground") : (size === 'small' ? "font-medium text-sm text-muted-foreground" : size === 'medium' ? "font-medium text-base text-muted-foreground" : "font-medium text-lg text-muted-foreground")}>
                     Aa
                   </span>
-                  <span className={cn('text-xs', fontSize === size ? 'text-foreground font-medium' : 'text-muted-foreground')}>
+                  <span className={fontSize === size ? "text-xs text-foreground font-medium" : "text-xs text-muted-foreground"}>
                     {fontSizeLabel[size]}
                   </span>
                 </button>
@@ -126,18 +103,15 @@ export function Settings() {
         </Card>
 
         {/* Profile */}
-        <Card className="border-border/60">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">プロフィール</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <Card>
+          <div className="px-4 pb-3">
+            <p className="text-sm font-medium">プロフィール</p>
+          </div>
+          <div className="px-4 space-y-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-12 w-12">
-                <AvatarImage src={mockUser.avatar} alt={mockUser.name} />
-                <AvatarFallback className="bg-foreground/10 text-foreground font-medium">
-                  {mockUser.name.slice(0, 1)}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative flex size-12 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten">
+                <img src={mockUser.avatar} alt={mockUser.name} className="aspect-square size-full rounded-full object-cover" />
+              </div>
               <div>
                 <p className="text-sm font-medium text-foreground">{mockUser.name}</p>
                 <p className="text-xs text-muted-foreground">{mockUser.role} / {mockUser.department}</p>
@@ -146,23 +120,23 @@ export function Settings() {
             <Separator />
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-xs">名前</Label>
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="rounded-lg h-9" />
+                <label htmlFor="name" className="flex items-center gap-2 text-xs leading-none font-medium select-none">名前</label>
+                <input id="name" value={name} onChange={(e) => setName(e.target.value)} className="h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-xs">メール</Label>
-                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="rounded-lg h-9" />
+                <label htmlFor="email" className="flex items-center gap-2 text-xs leading-none font-medium select-none">メール</label>
+                <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm" />
               </div>
             </div>
-          </CardContent>
+          </div>
         </Card>
 
         {/* Notifications */}
-        <Card className="border-border/60">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">通知</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <Card>
+          <div className="px-4 pb-3">
+            <p className="text-sm font-medium">通知</p>
+          </div>
+          <div className="px-4 space-y-3">
             {[
               { key: 'email' as const, label: 'メール通知', desc: '重要な更新をメールで受け取る' },
               { key: 'browser' as const, label: 'ブラウザ通知', desc: 'デスクトップにプッシュ通知を表示' },
@@ -181,21 +155,21 @@ export function Settings() {
                     }
                   />
                 </div>
-                {i < arr.length - 1 && <Separator className="mt-3" />}
+                {i < arr.length - 1 && <Separator />}
               </div>
             ))}
-          </CardContent>
+          </div>
         </Card>
 
         {/* AI Model */}
-        <Card className="border-border/60">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">AIモデル</CardTitle>
-            <CardDescription className="text-xs">使用するモデルを選択</CardDescription>
-          </CardHeader>
+        <Card>
+          <div className="px-4 pb-3">
+            <p className="text-sm font-medium">AIモデル</p>
+            <p className="text-xs text-muted-foreground mt-1">使用するモデルを選択</p>
+          </div>
           <CardContent>
             <Select value={aiModel} onValueChange={(val) => val && setAiModel(val)}>
-              <SelectTrigger className="rounded-lg h-9">
+              <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -211,11 +185,11 @@ export function Settings() {
 
         {/* Save */}
         <div className="flex justify-end pb-8">
-          <Button onClick={handleSave} className="rounded-lg min-w-24">
+          <button className="inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-primary text-primary-foreground min-w-24 h-8 px-2.5 text-sm font-medium transition-all" onClick={handleSave}>
             {saved ? (
               <span className="flex items-center gap-1.5"><Check className="h-4 w-4" /> 保存済み</span>
             ) : '保存'}
-          </Button>
+          </button>
         </div>
       </div>
     </div>
